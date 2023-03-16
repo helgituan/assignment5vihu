@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-
+import {deleteAll} from "@/lib/todoStore"
 // Add your e2e tests here
 
 test.beforeEach(async ({page}) => {
@@ -15,6 +15,10 @@ Write a Playwright test that adds a new item to the list ✅
 Write a Playwright test that adds a second item to the list ✅
 Write a Playwright test that removes one item from the list ✅
 */
+
+test.afterEach(async () => {
+  await deleteAll();
+})
 
 test("validates the TODO list is empty", async ({
   page,
@@ -48,7 +52,15 @@ test('should allow me to add todo items', async ({ page }) => {
 
   // create a new todo locator
   const newTodo = page.getByPlaceholder('What are you going to TODO?');
+  
+  await newTodo.fill(TODO_ITEMS[0]);
+  await newTodo.press('Enter');
+  await expect(page.getByTestId('todo-item')).toHaveText([
+    TODO_ITEMS[0]
+  ]);
+
   // Create 1st todo.
+
   await newTodo.fill(TODO_ITEMS[1]);
   await newTodo.press('Enter');
 
@@ -62,6 +74,14 @@ test('should allow me to add todo items', async ({ page }) => {
 test("removes one from the list", async ({
   page,
 }) => {
+
+  const newTodo = page.getByPlaceholder('What are you going to TODO?');
+  await newTodo.fill(TODO_ITEMS[0]);
+  await newTodo.press('Enter');
+
+  await newTodo.fill(TODO_ITEMS[1]);
+  await newTodo.press('Enter');
+
   const todoItems = page.getByTestId('todo-item');
   await todoItems.nth(0).click();
 
