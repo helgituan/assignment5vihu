@@ -1,4 +1,5 @@
-import { getTodos, Todo } from "@/lib/todoStore";
+import { getTodos } from "@/lib/todoStore";
+import { Todo } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

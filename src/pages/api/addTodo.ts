@@ -1,6 +1,7 @@
 // pages/api/addTodo.ts
 
-import { addTodo, Todo } from "@/lib/todoStore";
+import { addTodo } from "@/lib/todoStore";
+import { Todo } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type AddTodoRequestBody = {

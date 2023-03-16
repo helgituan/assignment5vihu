@@ -1,8 +1,9 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { useEffect, useState, SetStateAction } from "react";
-import { Todo } from "@/lib/todoStore";
+
 import axios from "axios";
+import { Todo } from "@prisma/client";
 
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
