@@ -23,6 +23,7 @@ jobs:
   testE2E:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    container: node:18-bullseye
     services:
       postgres:
         image: postgres
