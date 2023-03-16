@@ -23,6 +23,20 @@ jobs:
   testE2E:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: todo
+        ports:
+          - 5432/tcp
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -32,7 +46,16 @@ jobs:
         run: npm ci
       - name: build
         run: npm run build
+      - name: reset
+        run: npx prisma migrate reset --force
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@postgres:5432/todo
       - name: install playwright
         run: npx playwright install --with-deps
       - name: Run playwright tests
         run: npm run test:e2e
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@postgres:5432/todo
+
+
+
