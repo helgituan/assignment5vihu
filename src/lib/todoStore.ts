@@ -1,30 +1,38 @@
 import { uuid } from "uuidv4";
 
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+/*
 export interface Todo {
   id: string;
   title: string;
 }
 
+
 const todos: Todo[] = [];
+*/
 
 export async function getTodos() {
+  const todos = await prisma.todo.findMany();
   return todos;
 }
 
 export async function addTodo(title: string) {
-  const newTodo = {
-    id: uuid(),
-    title: title,
-  };
-  todos.push(newTodo);
+  const newTodo = await prisma.todo.create({
+    data: {
+      title,
+    },
+  });
   return newTodo;
 }
 
+
 export async function removeTodoById(id: string) {
-  const index = todos.findIndex((todo) => todo.id === id);
-  if (index !== -1) {
-    todos.splice(index, 1);
-    return true;
-  }
-  return false;
+  const result = await prisma.todo.delete({
+    where: {
+      id,
+    },
+  });
+  return !!result;
 }
